@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: mini-ats-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: ENVIRONMENT
+        value: production
+      - key: DATABASE_URL
+        sync: false
+        # Paste your Neon PostgreSQL connection string here
+        # e.g.: postgresql://user:pass@ep-xyz-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require
+      - key: SECRET_KEY
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: COOKIE_SAMESITE
+        value: "lax"
+      - key: FIRST_USER_EMAIL
+        sync: false
+        # e.g.: recruiter@company.com
+      - key: FIRST_USER_PASSWORD
+        sync: false
+        # e.g.: strong-secure-password-here
+      - key: FIRST_USER_NAME
+        value: "Lead Recruiter"

@@ -1,0 +1,192 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Strictly Dark Enterprise Color Scheme */
+  color-scheme: dark;
+
+  /* Master Linear / Supabase / Raycast Surface Ladder */
+  /* Main Background: Deep Obsidian Charcoal — NEVER pure white, NEVER washed-out */
+  --color-canvas: #0B0F17;
+  --color-canvas-alt: #0E1420;
+
+  /* Layered Surfaces */
+  --color-surface: #111827;
+  --color-surface-raised: #151F32;
+  --color-surface-alt: #1A2438;
+
+  --color-input: #0F172A;
+  --color-overlay: #111827;
+
+  /* High Contrast Razor-Sharp Typography */
+  --color-ink: #F8FAFC;
+  --color-muted: #94A3B8;
+  --color-subtle: #64748B;
+
+  /* Precision Translucent Hairlines */
+  --color-hairline: rgba(255, 255, 255, 0.08);
+  --color-hairline-strong: rgba(255, 255, 255, 0.16);
+
+  /* Signature Emerald Accent (Supabase / Linear Inspired) */
+  --color-accent: #10B981;
+  --color-accent-hover: #059669;
+  --color-accent-active: #047857;
+  --color-accent-subtle: rgba(16, 185, 129, 0.12);
+  --color-focus-ring: #10B981;
+
+  /* Semantic Status Tokens (Accessible on Dark Surfaces) */
+  --color-status-success: #10B981;
+  --color-status-success-bg: rgba(16, 185, 129, 0.14);
+  --color-status-warning: #F59E0B;
+  --color-status-warning-bg: rgba(245, 158, 11, 0.14);
+  --color-status-danger: #EF4444;
+  --color-status-danger-bg: rgba(239, 68, 68, 0.14);
+
+  /* 7 Structural Stage Tokens */
+  --color-stage-applied-bg: rgba(148, 163, 184, 0.12);
+  --color-stage-applied-text: #CBD5E1;
+
+  --color-stage-screening-bg: rgba(249, 115, 22, 0.14);
+  --color-stage-screening-text: #FB923C;
+
+  --color-stage-interview-bg: rgba(20, 184, 166, 0.14);
+  --color-stage-interview-text: #2DD4BF;
+
+  --color-stage-technical-bg: rgba(245, 158, 11, 0.14);
+  --color-stage-technical-text: #FBBF24;
+
+  --color-stage-offer-bg: rgba(168, 85, 247, 0.14);
+  --color-stage-offer-text: #C084FC;
+
+  --color-stage-hired-bg: rgba(16, 185, 129, 0.14);
+  --color-stage-hired-text: #34D399;
+
+  --color-stage-rejected-bg: rgba(239, 68, 68, 0.14);
+  --color-stage-rejected-text: #F87171;
+
+  /* Spacing Scale (4px Base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* Radius Family */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-control: 8px;
+  --radius-surface: 12px;
+  --radius-lg: 16px;
+
+  --duration-fast: 150ms;
+  --duration-settle: 200ms;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  color-scheme: dark;
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Subtle Structural Coordinate Grid Texture (0.12 Strategy D) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.25) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--color-ink);
+}
+
+/* Tabular figures for metrics & counts */
+.tnum, [data-tnum] {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* Polished focus ring */
+:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Linear Surface Ladder Utilities */
+.card-enterprise {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-surface);
+}
+
+.card-enterprise-hover {
+  transition: all 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+.card-enterprise-hover:hover {
+  background-color: var(--color-surface-raised);
+  border-color: var(--color-hairline-strong);
+}
+
+/* Dark Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}

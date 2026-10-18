@@ -1,0 +1,16 @@
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = [
+    "B008",  # Depends in argument defaults (standard FastAPI pattern)
+    "E501",  # Line too long
+    "UP042", # StrEnum vs (str, Enum) for SQLAlchemy compatibility
+    "UP046", # Generic typing
+    "B904",  # Exception chaining
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]

@@ -1,0 +1,2238 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Applicant Tracking System API",
+    "description": "Backend API for the mini ATS platform",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Liveness Health",
+        "description": "Liveness probe without database check (used by Render health check).",
+        "operationId": "liveness_health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Liveness Health Health Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health/ready": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Readiness Health",
+        "description": "Readiness probe that validates database connectivity.",
+        "operationId": "readiness_health_health_ready_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Login",
+        "description": "Authenticates user, sets HttpOnly session cookie, and returns user profile.",
+        "operationId": "login_api_v1_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Logout",
+        "description": "Clears HttpOnly session cookie.",
+        "operationId": "logout_api_v1_auth_logout_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Logout Api V1 Auth Logout Post"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/me": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Get Me",
+        "description": "Returns currently authenticated user profile.",
+        "operationId": "get_me_api_v1_auth_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserRead"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/candidates": {
+      "get": {
+        "tags": [
+          "Candidates"
+        ],
+        "summary": "List Candidates",
+        "description": "Retrieves paginated, filtered, and full-text ranked candidates.",
+        "operationId": "list_candidates_api_v1_candidates_get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Search query across name, email, role, and skills",
+              "title": "Q"
+            },
+            "description": "Search query across name, email, role, and skills"
+          },
+          {
+            "name": "stage",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CandidateStage"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by candidate stage",
+              "title": "Stage"
+            },
+            "description": "Filter by candidate stage"
+          },
+          {
+            "name": "source",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CandidateSource"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by candidate source",
+              "title": "Source"
+            },
+            "description": "Filter by candidate source"
+          },
+          {
+            "name": "role",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by applied role",
+              "title": "Role"
+            },
+            "description": "Filter by applied role"
+          },
+          {
+            "name": "skills",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by skills",
+              "title": "Skills"
+            },
+            "description": "Filter by skills"
+          },
+          {
+            "name": "created_from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Created on or after date",
+              "title": "Created From"
+            },
+            "description": "Created on or after date"
+          },
+          {
+            "name": "created_to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Created on or before date",
+              "title": "Created To"
+            },
+            "description": "Created on or before date"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Field to sort by",
+              "default": "created_at",
+              "title": "Sort"
+            },
+            "description": "Field to sort by"
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Sort order: asc or desc",
+              "default": "desc",
+              "title": "Order"
+            },
+            "description": "Sort order: asc or desc"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Page number",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Page number"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Page size (capped at 100)",
+              "default": 25,
+              "title": "Page Size"
+            },
+            "description": "Page size (capped at 100)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedResponse_CandidateRead_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Candidates"
+        ],
+        "summary": "Create Candidate",
+        "description": "Creates a new candidate and appends initial stage event atomically.",
+        "operationId": "create_candidate_api_v1_candidates_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CandidateCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CandidateRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/candidates/facets": {
+      "get": {
+        "tags": [
+          "Candidates"
+        ],
+        "summary": "Get Facets",
+        "description": "Returns available filter options and counts for roles, sources, and skills.",
+        "operationId": "get_facets_api_v1_candidates_facets_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CandidateFacets"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/candidates/bulk/stage": {
+      "post": {
+        "tags": [
+          "Candidates"
+        ],
+        "summary": "Bulk Change Stage",
+        "description": "Atomically transitions multiple candidates to a target stage.",
+        "operationId": "bulk_change_stage_api_v1_candidates_bulk_stage_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkStageChangeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkStageChangeResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/candidates/{candidate_id}": {
+      "get": {
+        "tags": [
+          "Candidates"
+        ],
+        "summary": "Get Candidate",
+        "description": "Returns single candidate by UUID.",
+        "operationId": "get_candidate_api_v1_candidates__candidate_id__get",
+        "parameters": [
+          {
+            "name": "candidate_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Candidate Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CandidateRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Candidates"
+        ],
+        "summary": "Update Candidate",
+        "description": "Updates candidate profile details.",
+        "operationId": "update_candidate_api_v1_candidates__candidate_id__patch",
+        "parameters": [
+          {
+            "name": "candidate_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Candidate Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CandidateUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CandidateRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Candidates"
+        ],
+        "summary": "Delete Candidate",
+        "description": "Soft deletes candidate.",
+        "operationId": "delete_candidate_api_v1_candidates__candidate_id__delete",
+        "parameters": [
+          {
+            "name": "candidate_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Candidate Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/candidates/{candidate_id}/stage": {
+      "post": {
+        "tags": [
+          "Candidates"
+        ],
+        "summary": "Change Stage",
+        "description": "Transitions a candidate to a new hiring stage, appending audit record.",
+        "operationId": "change_stage_api_v1_candidates__candidate_id__stage_post",
+        "parameters": [
+          {
+            "name": "candidate_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Candidate Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StageChangeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CandidateRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/candidates/{candidate_id}/events": {
+      "get": {
+        "tags": [
+          "Candidates"
+        ],
+        "summary": "List Candidate Events",
+        "description": "Returns chronological stage transitions and reason log.",
+        "operationId": "list_candidate_events_api_v1_candidates__candidate_id__events_get",
+        "parameters": [
+          {
+            "name": "candidate_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Candidate Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StageEventRead"
+                  },
+                  "title": "Response List Candidate Events Api V1 Candidates  Candidate Id  Events Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/candidates/{candidate_id}/notes": {
+      "get": {
+        "tags": [
+          "Candidates"
+        ],
+        "summary": "List Candidate Notes",
+        "description": "Lists all notes attached to candidate.",
+        "operationId": "list_candidate_notes_api_v1_candidates__candidate_id__notes_get",
+        "parameters": [
+          {
+            "name": "candidate_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Candidate Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/NoteRead"
+                  },
+                  "title": "Response List Candidate Notes Api V1 Candidates  Candidate Id  Notes Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Candidates"
+        ],
+        "summary": "Create Candidate Note",
+        "description": "Adds a new note to candidate.",
+        "operationId": "create_candidate_note_api_v1_candidates__candidate_id__notes_post",
+        "parameters": [
+          {
+            "name": "candidate_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Candidate Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoteCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoteRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/notes/{note_id}": {
+      "patch": {
+        "tags": [
+          "Notes"
+        ],
+        "summary": "Update Note",
+        "description": "Updates an existing note (restricted to author).",
+        "operationId": "update_note_api_v1_notes__note_id__patch",
+        "parameters": [
+          {
+            "name": "note_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Note Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoteUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoteRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Notes"
+        ],
+        "summary": "Delete Note",
+        "description": "Deletes a note (restricted to author).",
+        "operationId": "delete_note_api_v1_notes__note_id__delete",
+        "parameters": [
+          {
+            "name": "note_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Note Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dashboard/summary": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Get Dashboard Summary",
+        "description": "Returns high-level metric cards including pipeline totals and hire rate.",
+        "operationId": "get_dashboard_summary_api_v1_dashboard_summary_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardSummary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dashboard/funnel": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Get Dashboard Funnel",
+        "description": "Returns candidate distribution across all 7 stages for the Pipeline Strip.",
+        "operationId": "get_dashboard_funnel_api_v1_dashboard_funnel_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DashboardFunnelStage"
+                  },
+                  "type": "array",
+                  "title": "Response Get Dashboard Funnel Api V1 Dashboard Funnel Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dashboard/applications-timeseries": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Get Applications Timeseries",
+        "description": "Returns weekly application trend.",
+        "operationId": "get_applications_timeseries_api_v1_dashboard_applications_timeseries_get",
+        "parameters": [
+          {
+            "name": "weeks",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 52,
+              "minimum": 1,
+              "description": "Number of weeks to query",
+              "default": 12,
+              "title": "Weeks"
+            },
+            "description": "Number of weeks to query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DashboardTimeSeriesPoint"
+                  },
+                  "title": "Response Get Applications Timeseries Api V1 Dashboard Applications Timeseries Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dashboard/sources": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Get Sources Breakdown",
+        "description": "Returns candidate acquisition source percentages.",
+        "operationId": "get_sources_breakdown_api_v1_dashboard_sources_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DashboardSourceBreakdown"
+                  },
+                  "type": "array",
+                  "title": "Response Get Sources Breakdown Api V1 Dashboard Sources Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dashboard/stage-durations": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Get Stage Durations",
+        "description": "Returns average duration in days spent in each hiring stage.",
+        "operationId": "get_stage_durations_api_v1_dashboard_stage_durations_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DashboardStageDuration"
+                  },
+                  "type": "array",
+                  "title": "Response Get Stage Durations Api V1 Dashboard Stage Durations Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dashboard/recent-activity": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Get Recent Activity",
+        "description": "Returns recent candidate stage movements.",
+        "operationId": "get_recent_activity_api_v1_dashboard_recent_activity_get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Max activities to return",
+              "default": 10,
+              "title": "Limit"
+            },
+            "description": "Max activities to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DashboardRecentActivity"
+                  },
+                  "title": "Response Get Recent Activity Api V1 Dashboard Recent Activity Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Liveness Health",
+        "description": "Liveness probe without database check (used by Render health check).",
+        "operationId": "liveness_health_api_v1_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Liveness Health Api V1 Health Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/health/ready": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Readiness Health",
+        "description": "Readiness probe that validates database connectivity.",
+        "operationId": "readiness_health_api_v1_health_ready_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AuthResponse": {
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/UserRead"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "default": "Authenticated successfully"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user"
+        ],
+        "title": "AuthResponse"
+      },
+      "BulkStageChangeRequest": {
+        "properties": {
+          "candidate_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Candidate Ids",
+            "description": "List of candidate UUIDs to move"
+          },
+          "to_stage": {
+            "$ref": "#/components/schemas/CandidateStage",
+            "description": "Target hiring stage"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason",
+            "description": "Reason for bulk stage transition"
+          }
+        },
+        "type": "object",
+        "required": [
+          "candidate_ids",
+          "to_stage"
+        ],
+        "title": "BulkStageChangeRequest"
+      },
+      "BulkStageChangeResponse": {
+        "properties": {
+          "updated_count": {
+            "type": "integer",
+            "title": "Updated Count"
+          },
+          "to_stage": {
+            "$ref": "#/components/schemas/CandidateStage"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "updated_count",
+          "to_stage",
+          "message"
+        ],
+        "title": "BulkStageChangeResponse"
+      },
+      "CandidateCreate": {
+        "properties": {
+          "full_name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Full Name"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email"
+          },
+          "phone": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 50
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phone"
+          },
+          "location": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Location"
+          },
+          "applied_role": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Applied Role"
+          },
+          "source": {
+            "$ref": "#/components/schemas/CandidateSource",
+            "default": "other"
+          },
+          "experience_years": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 70.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Experience Years"
+          },
+          "skills": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Skills"
+          },
+          "resume_url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1024
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resume Url"
+          },
+          "linkedin_url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1024
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Linkedin Url"
+          },
+          "initial_stage": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CandidateStage"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": "applied"
+          }
+        },
+        "type": "object",
+        "required": [
+          "full_name",
+          "email",
+          "applied_role"
+        ],
+        "title": "CandidateCreate"
+      },
+      "CandidateFacets": {
+        "properties": {
+          "roles": {
+            "items": {
+              "$ref": "#/components/schemas/FacetItem"
+            },
+            "type": "array",
+            "title": "Roles"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/FacetItem"
+            },
+            "type": "array",
+            "title": "Sources"
+          },
+          "skills": {
+            "items": {
+              "$ref": "#/components/schemas/FacetItem"
+            },
+            "type": "array",
+            "title": "Skills"
+          },
+          "stages": {
+            "items": {
+              "$ref": "#/components/schemas/FacetItem"
+            },
+            "type": "array",
+            "title": "Stages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "roles",
+          "sources",
+          "skills",
+          "stages"
+        ],
+        "title": "CandidateFacets"
+      },
+      "CandidateRead": {
+        "properties": {
+          "full_name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Full Name"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email"
+          },
+          "phone": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 50
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phone"
+          },
+          "location": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Location"
+          },
+          "applied_role": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Applied Role"
+          },
+          "source": {
+            "$ref": "#/components/schemas/CandidateSource",
+            "default": "other"
+          },
+          "experience_years": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 70.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Experience Years"
+          },
+          "skills": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Skills"
+          },
+          "resume_url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1024
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resume Url"
+          },
+          "linkedin_url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1024
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Linkedin Url"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "current_stage": {
+            "$ref": "#/components/schemas/CandidateStage"
+          },
+          "stage_entered_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Stage Entered At"
+          },
+          "created_by": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Created By"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "deleted_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deleted At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "full_name",
+          "email",
+          "applied_role",
+          "id",
+          "current_stage",
+          "stage_entered_at",
+          "created_by",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "CandidateRead"
+      },
+      "CandidateSource": {
+        "type": "string",
+        "enum": [
+          "referral",
+          "linkedin",
+          "job_board",
+          "career_site",
+          "agency",
+          "other"
+        ],
+        "title": "CandidateSource"
+      },
+      "CandidateStage": {
+        "type": "string",
+        "enum": [
+          "applied",
+          "screening",
+          "interview",
+          "technical",
+          "offer",
+          "hired",
+          "rejected"
+        ],
+        "title": "CandidateStage"
+      },
+      "CandidateUpdate": {
+        "properties": {
+          "full_name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Full Name"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "email"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email"
+          },
+          "phone": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 50
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phone"
+          },
+          "location": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Location"
+          },
+          "applied_role": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Applied Role"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CandidateSource"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "experience_years": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 70.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Experience Years"
+          },
+          "skills": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Skills"
+          },
+          "resume_url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1024
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resume Url"
+          },
+          "linkedin_url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1024
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Linkedin Url"
+          }
+        },
+        "type": "object",
+        "title": "CandidateUpdate"
+      },
+      "DashboardFunnelStage": {
+        "properties": {
+          "stage": {
+            "$ref": "#/components/schemas/CandidateStage"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          },
+          "percentage": {
+            "type": "number",
+            "title": "Percentage"
+          }
+        },
+        "type": "object",
+        "required": [
+          "stage",
+          "count",
+          "percentage"
+        ],
+        "title": "DashboardFunnelStage"
+      },
+      "DashboardRecentActivity": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "candidate_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Candidate Id"
+          },
+          "candidate_name": {
+            "type": "string",
+            "title": "Candidate Name"
+          },
+          "from_stage": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CandidateStage"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "to_stage": {
+            "$ref": "#/components/schemas/CandidateStage"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "changed_by": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Changed By"
+          },
+          "changer_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Changer Name"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "candidate_id",
+          "candidate_name",
+          "to_stage",
+          "changed_by",
+          "created_at"
+        ],
+        "title": "DashboardRecentActivity"
+      },
+      "DashboardSourceBreakdown": {
+        "properties": {
+          "source": {
+            "$ref": "#/components/schemas/CandidateSource"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          },
+          "percentage": {
+            "type": "number",
+            "title": "Percentage"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source",
+          "count",
+          "percentage"
+        ],
+        "title": "DashboardSourceBreakdown"
+      },
+      "DashboardStageDuration": {
+        "properties": {
+          "stage": {
+            "$ref": "#/components/schemas/CandidateStage"
+          },
+          "avg_days": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avg Days"
+          }
+        },
+        "type": "object",
+        "required": [
+          "stage"
+        ],
+        "title": "DashboardStageDuration"
+      },
+      "DashboardSummary": {
+        "properties": {
+          "total_candidates": {
+            "type": "integer",
+            "title": "Total Candidates"
+          },
+          "active_pipeline": {
+            "type": "integer",
+            "title": "Active Pipeline"
+          },
+          "hired": {
+            "type": "integer",
+            "title": "Hired"
+          },
+          "rejected": {
+            "type": "integer",
+            "title": "Rejected"
+          },
+          "new_last_7_days": {
+            "type": "integer",
+            "title": "New Last 7 Days"
+          },
+          "new_previous_7_days": {
+            "type": "integer",
+            "title": "New Previous 7 Days"
+          },
+          "new_7_days_change": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "New 7 Days Change"
+          },
+          "hire_rate": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hire Rate"
+          },
+          "median_time_to_hire_days": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Median Time To Hire Days"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total_candidates",
+          "active_pipeline",
+          "hired",
+          "rejected",
+          "new_last_7_days",
+          "new_previous_7_days"
+        ],
+        "title": "DashboardSummary"
+      },
+      "DashboardTimeSeriesPoint": {
+        "properties": {
+          "week_start": {
+            "type": "string",
+            "title": "Week Start"
+          },
+          "week_label": {
+            "type": "string",
+            "title": "Week Label"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "week_start",
+          "week_label",
+          "count"
+        ],
+        "title": "DashboardTimeSeriesPoint"
+      },
+      "FacetItem": {
+        "properties": {
+          "value": {
+            "type": "string",
+            "title": "Value"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "value",
+          "count"
+        ],
+        "title": "FacetItem"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "LoginRequest": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email",
+            "description": "User email address"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 6,
+            "title": "Password",
+            "description": "Plain text password"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "title": "LoginRequest"
+      },
+      "NoteCreate": {
+        "properties": {
+          "body": {
+            "type": "string",
+            "maxLength": 5000,
+            "minLength": 1,
+            "title": "Body",
+            "description": "Note content"
+          }
+        },
+        "type": "object",
+        "required": [
+          "body"
+        ],
+        "title": "NoteCreate"
+      },
+      "NoteRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "candidate_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Candidate Id"
+          },
+          "author_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Author Id"
+          },
+          "author_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Author Name"
+          },
+          "body": {
+            "type": "string",
+            "title": "Body"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "candidate_id",
+          "author_id",
+          "body",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "NoteRead"
+      },
+      "NoteUpdate": {
+        "properties": {
+          "body": {
+            "type": "string",
+            "maxLength": 5000,
+            "minLength": 1,
+            "title": "Body",
+            "description": "Updated note content"
+          }
+        },
+        "type": "object",
+        "required": [
+          "body"
+        ],
+        "title": "NoteUpdate"
+      },
+      "PaginatedResponse_CandidateRead_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/CandidateRead"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "page_size": {
+            "type": "integer",
+            "title": "Page Size"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "page",
+          "page_size"
+        ],
+        "title": "PaginatedResponse[CandidateRead]"
+      },
+      "StageChangeRequest": {
+        "properties": {
+          "to_stage": {
+            "$ref": "#/components/schemas/CandidateStage",
+            "description": "Target hiring stage"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason",
+            "description": "Reason for stage change, required if leaving terminal stage"
+          }
+        },
+        "type": "object",
+        "required": [
+          "to_stage"
+        ],
+        "title": "StageChangeRequest"
+      },
+      "StageEventRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "candidate_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Candidate Id"
+          },
+          "from_stage": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CandidateStage"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "to_stage": {
+            "$ref": "#/components/schemas/CandidateStage"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "changed_by": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Changed By"
+          },
+          "changer_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Changer Name"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "candidate_id",
+          "to_stage",
+          "changed_by",
+          "created_at"
+        ],
+        "title": "StageEventRead"
+      },
+      "UserRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "full_name": {
+            "type": "string",
+            "title": "Full Name"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "email",
+          "full_name",
+          "created_at"
+        ],
+        "title": "UserRead"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
