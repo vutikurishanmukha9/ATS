@@ -20,9 +20,14 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 120
 
     @model_validator(mode="after")
-    def sync_secret_keys(self) -> "Settings":
+    def sync_security_and_cookie_settings(self) -> "Settings":
         if self.SECRET_KEY and self.JWT_SECRET == "ats-insecure-secret-key-change-in-production-min32chars":
             self.JWT_SECRET = self.SECRET_KEY
+        if self.ENV == "production":
+            self.COOKIE_SECURE = True
+            # Cross-origin deployments (e.g. Vercel frontend + Render backend) require SameSite=none + Secure
+            if self.COOKIE_SAMESITE.lower() == "lax":
+                self.COOKIE_SAMESITE = "none"
         return self
 
     # Cookie settings

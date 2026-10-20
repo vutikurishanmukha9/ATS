@@ -39,6 +39,14 @@ export async function apiFetch<T>(
     headers.set('Content-Type', 'application/json');
   }
 
+  // Inject Authorization Bearer token from localStorage for resilient cross-domain auth
+  if (typeof window !== 'undefined' && !headers.has('Authorization')) {
+    const token = localStorage.getItem('ats_token');
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
+  }
+
   // 3-second cold start timer
   let timer: any = null;
   let markedSlow = false;
@@ -52,7 +60,7 @@ export async function apiFetch<T>(
     const response = await fetch(url, {
       ...options,
       headers,
-      credentials: 'include', // Same-origin session cookie
+      credentials: 'include', // Both same-origin & cross-site credentials
     });
 
     clearTimeout(timer);
@@ -66,6 +74,9 @@ export async function apiFetch<T>(
     if (!response.ok) {
       // 401 Unauthorized redirect to login
       if (response.status === 401 && !window.location.pathname.startsWith('/login')) {
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('ats_token');
+        }
         window.location.href = `/login?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`;
       }
 

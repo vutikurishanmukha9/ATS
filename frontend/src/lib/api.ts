@@ -108,11 +108,14 @@ export function useLogin() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (credentials: { email: string; password: string }) =>
-      apiFetch<{ user: UserRead; message: string }>('/api/v1/auth/login', {
+      apiFetch<{ user: UserRead; access_token?: string; message: string }>('/api/v1/auth/login', {
         method: 'POST',
         body: JSON.stringify(credentials),
       }),
     onSuccess: (data) => {
+      if (data.access_token && typeof window !== 'undefined') {
+        localStorage.setItem('ats_token', data.access_token);
+      }
       queryClient.setQueryData(['auth', 'me'], data.user);
     },
   });
@@ -126,6 +129,9 @@ export function useLogout() {
         method: 'POST',
       }),
     onSuccess: () => {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('ats_token');
+      }
       queryClient.clear();
       window.location.href = '/login';
     },

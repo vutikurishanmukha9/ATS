@@ -37,7 +37,12 @@ async def login(
         path="/",
     )
 
-    return AuthResponse(user=user, message="Logged in successfully")
+    return AuthResponse(
+        user=user,
+        access_token=token,
+        token_type="bearer",
+        message="Logged in successfully",
+    )
 
 
 @router.post("/logout", status_code=status.HTTP_200_OK)
