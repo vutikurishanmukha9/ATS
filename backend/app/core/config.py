@@ -1,4 +1,4 @@
-from pydantic import field_validator
+from pydantic import field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -15,8 +15,15 @@ class Settings(BaseSettings):
 
     # Auth & Security
     JWT_SECRET: str = "ats-insecure-secret-key-change-in-production-min32chars"
+    SECRET_KEY: str | None = None
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 120
+
+    @model_validator(mode="after")
+    def sync_secret_keys(self) -> "Settings":
+        if self.SECRET_KEY and self.JWT_SECRET == "ats-insecure-secret-key-change-in-production-min32chars":
+            self.JWT_SECRET = self.SECRET_KEY
+        return self
 
     # Cookie settings
     COOKIE_NAME: str = "ats_session"
