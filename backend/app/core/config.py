@@ -32,20 +32,37 @@ class Settings(BaseSettings):
     COOKIE_SAMESITE: str = "lax"
 
     # CORS
-    CORS_ORIGINS: list[str] = [
+    CORS_ORIGINS: list[str] | str = [
         "http://localhost:5173",
         "http://localhost:3000",
         "http://127.0.0.1:5173",
     ]
 
-    @field_validator("CORS_ORIGINS", mode="before")
+    @field_validator("CORS_ORIGINS", mode="after")
     @classmethod
     def assemble_cors_origins(cls, v: object) -> list[str]:
-        if isinstance(v, str) and not v.startswith("["):
-            return [i.strip() for i in v.split(",") if i.strip()]
+        default_origins = [
+            "http://localhost:5173",
+            "http://localhost:3000",
+            "http://127.0.0.1:5173",
+        ]
+        if isinstance(v, str):
+            val = v.strip()
+            if not val:
+                return default_origins
+            if val.startswith("[") and val.endswith("]"):
+                try:
+                    import json
+                    parsed = json.loads(val)
+                    if isinstance(parsed, list):
+                        return [str(item).strip() for item in parsed if str(item).strip()]
+                except Exception:
+                    pass
+            return [i.strip() for i in val.split(",") if i.strip()]
         elif isinstance(v, list):
-            return v
-        return ["http://localhost:5173", "http://localhost:3000"]
+            items = [str(i).strip() for i in v if str(i).strip()]
+            return items if items else default_origins
+        return default_origins
 
     # First user bootstrap (CLI)
     FIRST_USER_EMAIL: str | None = None
