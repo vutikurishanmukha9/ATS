@@ -15,9 +15,8 @@ export interface StatusIndicatorProps extends React.HTMLAttributes<HTMLSpanEleme
 }
 
 /**
- * Enterprise Status Indicator component
- * Follows enterprise design system patterns for semantic status communication
- * with high/low emphasis, accessible contrast, and dot indicator.
+ * Clean Status Indicator component
+ * Calibrated semantic indicators with crisp contrast and quiet background fills.
  */
 export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
   type = 'neutral',
@@ -41,9 +40,9 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
   > = {
     neutral: {
       low: {
-        bg: 'bg-slate-800/70',
+        bg: 'bg-white/[0.04]',
         text: 'text-slate-300',
-        border: 'border-slate-700/60',
+        border: 'border-white/[0.08]',
         dot: 'bg-slate-400',
       },
       high: {
@@ -55,9 +54,9 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
     },
     success: {
       low: {
-        bg: 'bg-emerald-950/50',
-        text: 'text-emerald-300',
-        border: 'border-emerald-500/30',
+        bg: 'bg-emerald-500/10',
+        text: 'text-emerald-400',
+        border: 'border-emerald-500/20',
         dot: 'bg-emerald-400',
       },
       high: {
@@ -69,23 +68,23 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
     },
     accent: {
       low: {
-        bg: 'bg-emerald-950/60',
-        text: 'text-emerald-300',
-        border: 'border-emerald-500/40',
-        dot: 'bg-emerald-400',
+        bg: 'bg-blue-500/10',
+        text: 'text-blue-400',
+        border: 'border-blue-500/20',
+        dot: 'bg-blue-400',
       },
       high: {
-        bg: 'bg-emerald-600',
+        bg: 'bg-blue-600',
         text: 'text-white',
-        border: 'border-emerald-500',
+        border: 'border-blue-500',
         dot: 'bg-white',
       },
     },
     warning: {
       low: {
-        bg: 'bg-amber-950/50',
-        text: 'text-amber-300',
-        border: 'border-amber-500/30',
+        bg: 'bg-amber-500/10',
+        text: 'text-amber-400',
+        border: 'border-amber-500/20',
         dot: 'bg-amber-400',
       },
       high: {
@@ -97,9 +96,9 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
     },
     danger: {
       low: {
-        bg: 'bg-rose-950/50',
-        text: 'text-rose-300',
-        border: 'border-rose-500/30',
+        bg: 'bg-rose-500/10',
+        text: 'text-rose-400',
+        border: 'border-rose-500/20',
         dot: 'bg-rose-400',
       },
       high: {
@@ -117,7 +116,7 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
   return (
     <span
       className={clsx(
-        'inline-flex items-center gap-1.5 font-medium rounded-full border select-none tracking-tight font-sans',
+        'inline-flex items-center gap-1.5 font-medium rounded-md border select-none tracking-tight font-sans',
         current.bg,
         current.text,
         current.border,
@@ -131,7 +130,7 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
           {pulse && (
             <span
               className={clsx(
-                'animate-ping absolute inline-flex h-full w-full rounded-full opacity-75',
+                'animate-ping absolute inline-flex h-full w-full rounded-full opacity-40',
                 current.dot
               )}
             />

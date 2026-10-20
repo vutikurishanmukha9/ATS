@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Layers, ArrowRight, Mail, Lock, Terminal, Copy, Check } from 'lucide-react';
+import { Briefcase, Mail, Lock, ArrowRight, Sparkles } from 'lucide-react';
 import { ErrorBanner } from '../components/ui/error-banner';
 import { useLogin } from '../lib/api';
 
 const loginSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
+  email: z.string().email('Please enter a valid work email address'),
   password: z.string().min(1, 'Password is required'),
 });
 
@@ -18,7 +18,6 @@ export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const loginMutation = useLogin();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [copiedCli, setCopiedCli] = useState(false);
 
   const {
     register,
@@ -40,11 +39,11 @@ export const LoginPage: React.FC = () => {
       navigate('/dashboard', { replace: true });
     } catch (err: any) {
       if (err.status === 429) {
-        setErrorMessage('Too many failed login attempts. Please wait 15 minutes before trying again.');
+        setErrorMessage('Too many failed attempts. Please wait a few minutes before trying again.');
       } else if (err.status === 401) {
         setErrorMessage('Invalid email or password. Please verify your credentials.');
       } else {
-        setErrorMessage(err.message || 'Unable to sign in. Please check your connection and try again.');
+        setErrorMessage(err.message || 'Unable to sign in. Please verify your connection.');
       }
     }
   };
@@ -54,39 +53,31 @@ export const LoginPage: React.FC = () => {
     setValue('password', 'Password123!', { shouldValidate: true });
   };
 
-  const handleCopyCli = () => {
-    navigator.clipboard.writeText('python -m app.cli create-first-user');
-    setCopiedCli(true);
-    setTimeout(() => setCopiedCli(false), 2000);
-  };
-
   return (
-    <div className="min-h-screen bg-canvas text-ink flex items-center justify-center p-4 relative select-none w-full max-w-full overflow-x-hidden">
-      <div className="w-full max-w-md relative z-10 space-y-6">
+    <div className="min-h-screen bg-[#090D16] text-slate-100 flex flex-col items-center justify-center p-4 relative select-none w-full max-w-full overflow-x-hidden">
+      <div className="w-full max-w-[380px] space-y-6">
         {/* Brand Header */}
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-emerald-600 text-white shadow-lg shadow-emerald-950/60 mb-1 border border-emerald-500/40">
-            <Layers className="w-6 h-6 stroke-[2.2]" aria-hidden="true" />
+          <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-slate-800 border border-slate-700/80 text-emerald-400 mb-1 shadow-sm">
+            <Briefcase className="w-5 h-5 stroke-[2]" aria-hidden="true" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-white font-display">
-            Welcome to Crack it
+          <h1 className="text-xl font-semibold tracking-tight text-white">
+            Sign in to Crack it
           </h1>
-          <p className="text-xs text-slate-400 max-w-xs mx-auto">
-            Candidate management, hiring pipeline velocity, and recruitment operations.
+          <p className="text-xs text-slate-400">
+            Recruitment management and candidate pipeline
           </p>
         </div>
 
-        {/* Elevated Form Card */}
-        <div className="bg-slate-900/80 rounded-2xl border border-white/[0.1] shadow-2xl p-7 space-y-5 backdrop-blur-md">
-          {errorMessage && (
-            <ErrorBanner message={errorMessage} />
-          )}
+        {/* Clean Auth Card */}
+        <div className="bg-[#0E131F] rounded-xl border border-slate-800 shadow-xl p-6 space-y-4">
+          {errorMessage && <ErrorBanner message={errorMessage} />}
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Email Field */}
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-slate-300">
-                Work Email
+              <label className="block text-xs font-medium text-slate-300">
+                Work email
               </label>
               <div className="relative">
                 <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" aria-hidden="true" />
@@ -94,12 +85,12 @@ export const LoginPage: React.FC = () => {
                   type="email"
                   autoComplete="email"
                   autoFocus
-                  placeholder="recruiter@company.com"
+                  placeholder="name@company.com"
                   {...register('email')}
-                  className={`w-full h-10 pl-9 pr-3 text-sm bg-slate-950 border rounded-lg text-white placeholder:text-slate-500 transition-all focus:outline-none focus:ring-2 ${
+                  className={`w-full h-9 pl-9 pr-3 text-xs bg-[#090D16] border rounded-lg text-slate-100 placeholder:text-slate-500 transition-colors focus:outline-none focus:ring-1 ${
                     errors.email
-                      ? 'border-rose-500/80 focus:ring-rose-500/25'
-                      : 'border-white/[0.1] hover:border-white/[0.18] focus:border-emerald-500 focus:ring-emerald-500/25'
+                      ? 'border-rose-500/80 focus:ring-rose-500/30'
+                      : 'border-slate-800 hover:border-slate-700 focus:border-slate-600 focus:ring-slate-600'
                   }`}
                 />
               </div>
@@ -110,9 +101,11 @@ export const LoginPage: React.FC = () => {
 
             {/* Password Field */}
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-slate-300">
-                Password
-              </label>
+              <div className="flex items-center justify-between">
+                <label className="block text-xs font-medium text-slate-300">
+                  Password
+                </label>
+              </div>
               <div className="relative">
                 <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" aria-hidden="true" />
                 <input
@@ -120,10 +113,10 @@ export const LoginPage: React.FC = () => {
                   autoComplete="current-password"
                   placeholder="••••••••••••"
                   {...register('password')}
-                  className={`w-full h-10 pl-9 pr-3 text-sm bg-slate-950 border rounded-lg text-white placeholder:text-slate-500 transition-all focus:outline-none focus:ring-2 ${
+                  className={`w-full h-9 pl-9 pr-3 text-xs bg-[#090D16] border rounded-lg text-slate-100 placeholder:text-slate-500 transition-colors focus:outline-none focus:ring-1 ${
                     errors.password
-                      ? 'border-rose-500/80 focus:ring-rose-500/25'
-                      : 'border-white/[0.1] hover:border-white/[0.18] focus:border-emerald-500 focus:ring-emerald-500/25'
+                      ? 'border-rose-500/80 focus:ring-rose-500/30'
+                      : 'border-slate-800 hover:border-slate-700 focus:border-slate-600 focus:ring-slate-600'
                   }`}
                 />
               </div>
@@ -136,62 +129,37 @@ export const LoginPage: React.FC = () => {
             <button
               type="submit"
               disabled={isSubmitting || loginMutation.isPending}
-              className="w-full h-10 mt-2 bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] text-white text-sm font-semibold rounded-lg shadow-sm shadow-emerald-950/40 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+              className="w-full h-9 mt-1 bg-emerald-600 hover:bg-emerald-500 active:scale-[0.99] text-white text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
             >
               {isSubmitting || loginMutation.isPending ? (
                 <span>Signing in...</span>
               ) : (
                 <>
-                  <span>Sign in to Dashboard</span>
-                  <ArrowRight className="w-4 h-4 stroke-[2.2]" aria-hidden="true" />
+                  <span>Continue</span>
+                  <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
                 </>
               )}
             </button>
           </form>
 
-          {/* 1-Click Demo Account Quick Fill */}
-          <div className="pt-3 border-t border-white/[0.08] flex items-center justify-between">
-            <span className="text-[11px] text-slate-400 font-medium">Quick testing:</span>
+          {/* Discreet Demo Account Helper */}
+          <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between">
+            <span className="text-[11px] text-slate-400">Demo account:</span>
             <button
               type="button"
               onClick={handleFillDemo}
-              className="inline-flex items-center text-xs font-semibold text-emerald-300 hover:text-emerald-200 bg-emerald-950/60 hover:bg-emerald-900/60 border border-emerald-500/30 px-2.5 py-1 rounded-md transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer"
             >
-              Fill Demo Credentials
+              <Sparkles className="w-3 h-3" aria-hidden="true" />
+              <span>Fill demo credentials</span>
             </button>
           </div>
         </div>
 
-        {/* First-Time Setup Helper Box */}
-        <div className="bg-slate-900/50 backdrop-blur-xs rounded-xl border border-white/[0.06] p-3.5 text-xs text-slate-400 space-y-2">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5 font-semibold text-slate-300 text-[11px]">
-              <Terminal className="w-3.5 h-3.5 text-slate-400" aria-hidden="true" />
-              <span>Bootstrap Administrator CLI</span>
-            </div>
-            <button
-              type="button"
-              onClick={handleCopyCli}
-              className="text-[11px] text-slate-400 hover:text-white inline-flex items-center gap-1"
-              title="Copy CLI command"
-            >
-              {copiedCli ? (
-                <>
-                  <Check className="w-3 h-3 text-emerald-400" aria-hidden="true" />
-                  <span className="text-emerald-400 font-medium">Copied</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="w-3 h-3" aria-hidden="true" />
-                  <span>Copy</span>
-                </>
-              )}
-            </button>
-          </div>
-          <code className="block bg-slate-950 p-2 rounded-lg font-mono text-[11px] text-emerald-400 select-all border border-white/[0.06]">
-            python -m app.cli create-first-user
-          </code>
-        </div>
+        {/* Quiet Footer */}
+        <p className="text-center text-[11px] text-slate-500">
+          Protected by role-based authentication and audit logging.
+        </p>
       </div>
     </div>
   );

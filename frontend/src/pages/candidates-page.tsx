@@ -238,35 +238,35 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
 
   return (
     <div className="space-y-4 w-full max-w-full overflow-hidden font-sans">
-      {/* Executive Pipeline Intelligence Strip */}
+      {/* Top Summary Metrics */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <div className="bg-slate-900/60 rounded-2xl border border-white/[0.08] p-3.5 flex items-center justify-between shadow-xs">
+        <div className="bg-[#0E131F]/90 rounded-xl border border-white/[0.08] p-3.5 flex items-center justify-between shadow-sm">
           <div>
-            <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider font-mono">Talent Pool</div>
+            <div className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Total Candidates</div>
             <div className="text-xl font-bold font-mono text-white mt-0.5">{totalCount}</div>
-            <div className="text-[10px] text-slate-400">Total active profiles</div>
+            <div className="text-[11px] text-slate-500 mt-0.5">All active talent profiles</div>
           </div>
-          <div className="w-9 h-9 rounded-xl bg-slate-800/80 border border-white/[0.08] flex items-center justify-center text-emerald-400">
+          <div className="w-8 h-8 rounded-lg bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-slate-400">
             <Users className="w-4 h-4" />
           </div>
         </div>
 
-        <div className="bg-slate-900/60 rounded-2xl border border-white/[0.08] p-3.5 flex items-center justify-between shadow-xs">
+        <div className="bg-[#0E131F]/90 rounded-xl border border-white/[0.08] p-3.5 flex items-center justify-between shadow-sm">
           <div>
-            <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider font-mono">In Active Review</div>
+            <div className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">In Active Review</div>
             <div className="text-xl font-bold font-mono text-white mt-0.5">
               {candidates.filter((c) => ['screening', 'interview', 'technical'].includes(c.current_stage)).length}
             </div>
-            <div className="text-[10px] text-emerald-400 font-mono">Screening & Technical</div>
+            <div className="text-[11px] text-slate-500 mt-0.5">Screening & Technical</div>
           </div>
-          <div className="w-9 h-9 rounded-xl bg-slate-800/80 border border-white/[0.08] flex items-center justify-center text-teal-400">
+          <div className="w-8 h-8 rounded-lg bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-slate-400">
             <Briefcase className="w-4 h-4" />
           </div>
         </div>
 
-        <div className="bg-slate-900/60 rounded-2xl border border-white/[0.08] p-3.5 flex items-center justify-between shadow-xs">
+        <div className="bg-[#0E131F]/90 rounded-xl border border-white/[0.08] p-3.5 flex items-center justify-between shadow-sm">
           <div>
-            <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider font-mono">High Match Rate</div>
+            <div className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">High Match Rate</div>
             <div className="text-xl font-bold font-mono text-white mt-0.5">
               {totalCount > 0
                 ? `${Math.round(
@@ -274,22 +274,22 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
                   )}%`
                 : '0%'}
             </div>
-            <div className="text-[10px] text-slate-400">≥ 70% ATS score</div>
+            <div className="text-[11px] text-slate-500 mt-0.5">≥ 70% ATS score</div>
           </div>
-          <div className="w-9 h-9 rounded-xl bg-slate-800/80 border border-white/[0.08] flex items-center justify-center text-amber-400">
+          <div className="w-8 h-8 rounded-lg bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-slate-400">
             <TrendingUp className="w-4 h-4" />
           </div>
         </div>
 
-        <div className="bg-slate-900/60 rounded-2xl border border-white/[0.08] p-3.5 flex items-center justify-between shadow-xs">
+        <div className="bg-[#0E131F]/90 rounded-xl border border-white/[0.08] p-3.5 flex items-center justify-between shadow-sm">
           <div>
-            <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider font-mono">Offers Extended</div>
+            <div className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Offers Extended</div>
             <div className="text-xl font-bold font-mono text-white mt-0.5">
               {candidates.filter((c) => c.current_stage === 'offer').length}
             </div>
-            <div className="text-[10px] text-purple-400 font-mono">Final milestone</div>
+            <div className="text-[11px] text-slate-500 mt-0.5">Final milestone reached</div>
           </div>
-          <div className="w-9 h-9 rounded-xl bg-slate-800/80 border border-white/[0.08] flex items-center justify-center text-purple-400">
+          <div className="w-8 h-8 rounded-lg bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-slate-400">
             <Award className="w-4 h-4" />
           </div>
         </div>
@@ -302,8 +302,8 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
         onStageSelect={handleStageSelect}
       />
 
-      {/* Enterprise Command & Filter Toolbar */}
-      <div className="bg-slate-900/60 rounded-2xl border border-white/[0.08] p-3 sm:p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-inner">
+      {/* Filter & Command Toolbar */}
+      <div className="bg-[#0E131F]/90 rounded-xl border border-white/[0.08] p-3 sm:p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-sm">
         {/* Left: Search & Filter Dropdowns */}
         <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 flex-1 w-full md:w-auto">
           {/* Search Input */}
@@ -311,13 +311,13 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
             <Search className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" aria-hidden="true" />
             <input
               type="text"
-              placeholder="Search talent pool (e.g. Python AND Docker)..."
+              placeholder="Search candidate name, role, skills..."
               value={searchInput}
               onChange={(e) => {
                 setSearchInput(e.target.value);
                 setPage(1);
               }}
-              className="w-full h-9 pl-9 pr-14 text-xs bg-slate-950/80 hover:bg-slate-950 focus:bg-slate-950 border border-white/[0.1] rounded-xl text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/25 focus:border-emerald-500 transition-all font-sans"
+              className="w-full h-9 pl-9 pr-14 text-xs bg-[#090D16] hover:bg-[#090D16]/90 focus:bg-[#090D16] border border-white/[0.09] rounded-lg text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 transition-colors font-sans"
             />
             <div className="absolute right-2.5 top-2 flex items-center gap-1">
               {searchInput ? (
@@ -330,19 +330,12 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
                   <X className="w-3.5 h-3.5" aria-hidden="true" />
                 </button>
               ) : (
-                <kbd className="hidden sm:inline-block px-1 py-0.2 text-[10px] font-mono text-slate-500 bg-slate-900 border border-white/[0.08] rounded">
+                <kbd className="hidden sm:inline-block px-1 py-0.2 text-[10px] font-mono text-slate-500 bg-white/[0.04] border border-white/[0.06] rounded">
                   /
                 </kbd>
               )}
             </div>
           </div>
-
-          {/* Boolean Syntax Indicator */}
-          {Boolean(searchInput && /\b(AND|OR|NOT)\b/i.test(searchInput)) && (
-            <span className="hidden lg:inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 text-[10px] font-mono font-bold">
-              Boolean Query Active
-            </span>
-          )}
 
           {/* Source Filter */}
           <select
@@ -351,7 +344,7 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
               setSelectedSource(e.target.value as CandidateSource);
               setPage(1);
             }}
-            className="h-9 px-3 text-xs bg-slate-950/80 hover:bg-slate-950 border border-white/[0.1] rounded-xl text-slate-300 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/25 focus:border-emerald-500 transition-all cursor-pointer w-full sm:w-auto"
+            className="h-9 px-3 text-xs bg-[#090D16] hover:bg-[#090D16]/90 border border-white/[0.09] rounded-lg text-slate-300 font-medium focus:outline-none focus:ring-1 focus:ring-slate-400 transition-colors cursor-pointer w-full sm:w-auto"
           >
             <option value="">All Sources</option>
             {Object.entries(SOURCE_LABELS).map(([key, label]) => (
@@ -365,9 +358,9 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
           <select
             value={matchScoreFilter}
             onChange={(e) => setMatchScoreFilter(e.target.value as any)}
-            className="h-9 px-3 text-xs bg-slate-950/80 hover:bg-slate-950 border border-white/[0.1] rounded-xl text-slate-300 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/25 focus:border-emerald-500 transition-all cursor-pointer w-full sm:w-auto"
+            className="h-9 px-3 text-xs bg-[#090D16] hover:bg-[#090D16]/90 border border-white/[0.09] rounded-lg text-slate-300 font-medium focus:outline-none focus:ring-1 focus:ring-slate-400 transition-colors cursor-pointer w-full sm:w-auto"
           >
-            <option value="all">All Match %</option>
+            <option value="all">All Match Scores</option>
             <option value="high">High Match (≥ 70%)</option>
             <option value="medium">Moderate (50–69%)</option>
             <option value="low">Low Match (&lt; 50%)</option>
@@ -384,10 +377,10 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
                 setMatchScoreFilter('all');
                 setSearchParams({});
               }}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700/80 border border-white/[0.08] rounded-xl transition-colors cursor-pointer font-medium"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs text-slate-400 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-lg transition-colors cursor-pointer font-medium"
             >
               <RotateCcw className="w-3 h-3 text-slate-400" aria-hidden="true" />
-              <span>Reset</span>
+              <span>Reset Filters</span>
             </button>
           )}
         </div>
@@ -414,7 +407,7 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
                 aria-label="Table row density"
                 options={[
                   { id: 'compact', label: 'Compact' },
-                  { id: 'comfortable', label: 'Spacious' },
+                  { id: 'comfortable', label: 'Comfortable' },
                 ]}
               />
             </div>
@@ -430,16 +423,15 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
             title="Export candidates pipeline to CSV spreadsheet"
           >
             <Download className="w-3.5 h-3.5 sm:mr-1 text-slate-400" />
-            <span className="hidden sm:inline">Export</span>
+            <span className="hidden sm:inline">Export CSV</span>
           </Button>
 
           <Button
             variant="secondary"
             size="sm"
             onClick={() => setScreeningModalOpen(true)}
-            className="border-emerald-500/40 text-emerald-300 bg-emerald-950/40 hover:bg-emerald-900/40"
           >
-            <FileSearch className="w-4 h-4 text-emerald-400 stroke-[2] shrink-0" aria-hidden="true" />
+            <FileSearch className="w-3.5 h-3.5 sm:mr-1 text-slate-400" aria-hidden="true" />
             <span>Keyword Screen</span>
           </Button>
 
@@ -448,13 +440,13 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
             size="sm"
             onClick={onOpenCreateCandidate}
           >
-            <Plus className="w-4 h-4 stroke-[2.2] shrink-0" aria-hidden="true" />
+            <Plus className="w-4 h-4 stroke-[2.2] shrink-0 mr-1" aria-hidden="true" />
             <span>Add Candidate</span>
           </Button>
         </div>
       </div>
 
-      {/* Enterprise Docked Action Bar (Docked at bottom of viewport) */}
+      {/* Action Bar (Docked at bottom of viewport for bulk operations) */}
       <ActionBar
         selectedCount={selectedIds.size}
         itemTypeLabel="candidates"
@@ -463,7 +455,7 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
           {
             label: `Screen Selected (${selectedIds.size})`,
             variant: 'secondary',
-            icon: <FileSearch className="w-3.5 h-3.5 text-emerald-400 shrink-0" aria-hidden="true" />,
+            icon: <FileSearch className="w-3.5 h-3.5 text-slate-400 shrink-0" aria-hidden="true" />,
             onClick: () => setScreeningModalOpen(true),
           },
           {
@@ -482,17 +474,17 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
 
       {/* Main Content: Table or Board */}
       {viewMode === 'table' ? (
-        <div className="bg-slate-900/60 rounded-2xl border border-white/[0.08] shadow-inner overflow-hidden">
+        <div className="bg-[#0E131F]/90 rounded-xl border border-white/[0.08] shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[720px] text-left text-xs border-collapse">
               <thead>
-                <tr className="border-b border-white/[0.08] bg-slate-950/80 select-none text-[10px] font-semibold tracking-wider uppercase text-slate-400">
+                <tr className="border-b border-white/[0.08] bg-white/[0.02] select-none text-[10px] font-medium tracking-wider uppercase text-slate-400">
                   <th className="w-10 px-3.5 py-3 text-center">
                     <input
                       type="checkbox"
                       checked={candidates.length > 0 && selectedIds.size === candidates.length}
                       onChange={(e) => handleSelectAll(e.target.checked)}
-                      className="rounded border-slate-700 bg-slate-900 text-emerald-500 focus:ring-emerald-500/20 cursor-pointer"
+                      className="rounded border-slate-700 bg-slate-900 text-slate-200 focus:ring-0 cursor-pointer"
                     />
                   </th>
                   <th className="px-3.5 py-3">
@@ -502,16 +494,16 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
                         setSortField('full_name');
                         setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
                       }}
-                      className="flex items-center gap-1.5 hover:text-white cursor-pointer font-semibold uppercase tracking-wider"
+                      className="flex items-center gap-1.5 hover:text-white cursor-pointer font-medium uppercase tracking-wider"
                     >
                       <span>Candidate</span>
                       <ArrowUpDown className="w-3 h-3 text-slate-500" aria-hidden="true" />
                     </button>
                   </th>
-                  <th className="px-3.5 py-3 font-semibold uppercase tracking-wider">Applied Role</th>
-                  <th className="px-3.5 py-3 font-semibold uppercase tracking-wider">Milestone Stage</th>
-                  <th className="px-3.5 py-3 font-semibold uppercase tracking-wider">ATS Match</th>
-                  <th className="px-3.5 py-3 font-semibold uppercase tracking-wider">Source</th>
+                  <th className="px-3.5 py-3 font-medium uppercase tracking-wider">Applied Role</th>
+                  <th className="px-3.5 py-3 font-medium uppercase tracking-wider">Milestone Stage</th>
+                  <th className="px-3.5 py-3 font-medium uppercase tracking-wider">Match Score</th>
+                  <th className="px-3.5 py-3 font-medium uppercase tracking-wider">Source</th>
                   <th className="px-3.5 py-3">
                     <button
                       type="button"
@@ -519,13 +511,13 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
                         setSortField('created_at');
                         setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
                       }}
-                      className="flex items-center gap-1.5 hover:text-white cursor-pointer font-semibold uppercase tracking-wider"
+                      className="flex items-center gap-1.5 hover:text-white cursor-pointer font-medium uppercase tracking-wider"
                     >
                       <span>Applied</span>
                       <ArrowUpDown className="w-3 h-3 text-slate-500" aria-hidden="true" />
                     </button>
                   </th>
-                  <th className="w-28 px-3.5 py-3 text-right font-semibold uppercase tracking-wider">Actions</th>
+                  <th className="w-28 px-3.5 py-3 text-right font-medium uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/[0.04]">
@@ -533,7 +525,7 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
                   Array.from({ length: 6 }).map((_, i) => (
                     <tr key={i} className={density === 'compact' ? 'h-10' : 'h-14'}>
                       <td colSpan={8} className="px-4 py-3">
-                        <Skeleton className="h-5 w-full bg-slate-800/60" />
+                        <Skeleton className="h-5 w-full bg-white/[0.04]" />
                       </td>
                     </tr>
                   ))
@@ -566,8 +558,8 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
                     return (
                       <tr
                         key={candidate.id}
-                        className={`transition-colors hover:bg-slate-800/40 group ${
-                          isSelected ? 'bg-emerald-950/30' : ''
+                        className={`transition-colors hover:bg-white/[0.03] group ${
+                          isSelected ? 'bg-white/[0.04]' : ''
                         }`}
                       >
                         <td className="px-3.5 text-center">
@@ -575,19 +567,19 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
                             type="checkbox"
                             checked={isSelected}
                             onChange={(e) => handleSelectOne(candidate.id, e.target.checked)}
-                            className="rounded border-slate-700 bg-slate-900 text-emerald-500 focus:ring-emerald-500/20 cursor-pointer"
+                            className="rounded border-slate-700 bg-slate-900 text-slate-200 focus:ring-0 cursor-pointer"
                           />
                         </td>
                         <td className={`px-3.5 ${rowHeightClass}`}>
                           <div className="flex items-center gap-3 min-w-0">
-                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-slate-800 to-slate-900 border border-white/[0.12] text-emerald-400 font-mono font-bold text-xs flex items-center justify-center shrink-0 shadow-2xs select-none">
-                              {initials || <User className="w-3.5 h-3.5 text-slate-500" />}
+                            <div className="w-7 h-7 rounded-full bg-white/[0.06] border border-white/[0.1] text-slate-200 font-mono font-medium text-xs flex items-center justify-center shrink-0 select-none">
+                              {initials || <User className="w-3.5 h-3.5 text-slate-400" />}
                             </div>
                             <div className="flex flex-col min-w-0">
                               <button
                                 type="button"
                                 onClick={() => onSelectCandidate(candidate.id)}
-                                className="font-semibold text-xs text-white group-hover:text-emerald-400 text-left truncate cursor-pointer transition-colors"
+                                className="font-medium text-xs text-white group-hover:text-slate-200 text-left truncate cursor-pointer transition-colors"
                                 title={candidate.full_name}
                               >
                                 {candidate.full_name}
@@ -596,7 +588,7 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
                             </div>
                           </div>
                         </td>
-                        <td className={`px-3.5 ${rowHeightClass} text-slate-300 font-medium truncate max-w-[200px]`}>
+                        <td className={`px-3.5 ${rowHeightClass} text-slate-300 font-normal truncate max-w-[200px]`}>
                           <div className="flex items-center gap-1.5">
                             <Briefcase className="w-3.5 h-3.5 text-slate-500 shrink-0" />
                             <span className="truncate">{candidate.applied_role}</span>
@@ -616,7 +608,7 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
                                   : 'danger'
                               }
                               emphasis="low"
-                              pulse={candidate.match_score >= 80}
+                              pulse={false}
                               className="font-mono text-[11px]"
                             >
                               {Math.round(candidate.match_score)}%
@@ -639,16 +631,16 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
                               variant="secondary"
                               size="xs"
                               onClick={() => onSelectCandidate(candidate.id)}
-                              className="h-7 px-2.5 text-[11px] font-medium border-white/[0.08] hover:border-emerald-500/40 text-slate-200 hover:text-emerald-300"
+                              className="h-7 px-2 text-[11px] font-normal"
                             >
                               <span>Dossier</span>
-                              <ArrowUpRight className="w-3 h-3 text-slate-400" aria-hidden="true" />
+                              <ArrowUpRight className="w-3 h-3 text-slate-400 ml-1" aria-hidden="true" />
                             </Button>
                             <Button
                               variant="ghost"
                               size="xs"
                               onClick={() => onEditCandidate(candidate)}
-                              className="h-7 w-7 p-0 text-slate-400 hover:text-white hover:bg-slate-800"
+                              className="h-7 w-7 p-0 text-slate-400 hover:text-white"
                               title="Edit candidate profile"
                             >
                               <Edit2 className="w-3.5 h-3.5" aria-hidden="true" />
@@ -663,7 +655,7 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
             </table>
           </div>
 
-          {/* Enterprise Table Pagination */}
+          {/* Table Pagination */}
           <Pagination
             page={page}
             pageSize={pageSize}
@@ -699,7 +691,7 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
 
           <DragOverlay>
             {activeDragCandidate && (
-              <div className="bg-slate-900 border-2 border-emerald-500 rounded-xl p-3 shadow-2xl opacity-95 cursor-grabbing w-64 text-white">
+              <div className="bg-[#111827] border border-white/[0.2] rounded-xl p-3 shadow-2xl opacity-95 cursor-grabbing w-64 text-white">
                 <div className="font-semibold text-xs text-white">{activeDragCandidate.full_name}</div>
                 <div className="text-[11px] text-slate-400">{activeDragCandidate.applied_role}</div>
               </div>
@@ -711,21 +703,21 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
       {/* Bulk Stage Move Modal */}
       {bulkStageModal && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 rounded-2xl border border-white/[0.12] w-full max-w-sm p-6 space-y-4 shadow-2xl">
+          <div className="bg-[#0E131F] rounded-xl border border-white/[0.12] w-full max-w-sm p-6 space-y-4 shadow-2xl">
             <div>
-              <h3 className="font-bold text-base text-white font-display">Move {selectedIds.size} Candidates</h3>
+              <h3 className="font-semibold text-base text-white">Move {selectedIds.size} Candidates</h3>
               <p className="text-xs text-slate-400 mt-0.5">Select target milestone for all selected applicants.</p>
             </div>
 
             <div className="space-y-3.5">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label className="block text-xs font-medium text-slate-300 mb-1">
                   Target Stage
                 </label>
                 <select
                   value={targetBulkStage}
                   onChange={(e) => setTargetBulkStage(e.target.value as CandidateStage)}
-                  className="w-full h-9 px-3 text-xs bg-slate-950 text-slate-100 border border-white/[0.1] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/25"
+                  className="w-full h-9 px-3 text-xs bg-[#090D16] text-slate-100 border border-white/[0.1] rounded-lg focus:outline-none focus:ring-1 focus:ring-slate-400"
                 >
                   {STAGES.map((s) => (
                     <option key={s.key} value={s.key}>
@@ -736,7 +728,7 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label className="block text-xs font-medium text-slate-300 mb-1">
                   Transition Reason (optional)
                 </label>
                 <input
@@ -744,7 +736,7 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
                   placeholder="e.g. Batch moved following technical debrief"
                   value={bulkReason}
                   onChange={(e) => setBulkReason(e.target.value)}
-                  className="w-full h-9 px-3 text-xs bg-slate-950 text-slate-100 border border-white/[0.1] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/25"
+                  className="w-full h-9 px-3 text-xs bg-[#090D16] text-slate-100 border border-white/[0.1] rounded-lg focus:outline-none focus:ring-1 focus:ring-slate-400"
                 />
               </div>
             </div>
@@ -777,7 +769,7 @@ export const CandidatesPage: React.FC<CandidatesPageProps> = ({
   );
 };
 
-// Modern Kanban Column Component
+// Clean Kanban Column Component
 interface KanbanColumnProps {
   stageMeta: (typeof STAGES)[number];
   candidates: CandidateRead[];
@@ -798,24 +790,24 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
   return (
     <div
       ref={setNodeRef}
-      className={`w-72 min-w-[280px] max-w-[280px] shrink-0 rounded-2xl border transition-all flex flex-col min-h-[500px] p-2.5 ${
+      className={`w-72 min-w-[280px] max-w-[280px] shrink-0 rounded-xl border transition-colors flex flex-col min-h-[500px] p-2.5 ${
         isOver
-          ? 'border-emerald-500 bg-emerald-950/30 ring-1 ring-emerald-500/40'
-          : 'border-white/[0.08] bg-slate-900/50'
+          ? 'border-white/[0.3] bg-white/[0.05]'
+          : 'border-white/[0.08] bg-[#0E131F]/70'
       }`}
     >
       {/* Column Header */}
-      <div className="p-2.5 rounded-xl bg-slate-900/80 border border-white/[0.08] flex items-center justify-between mb-2">
+      <div className="p-2.5 rounded-lg bg-white/[0.03] border border-white/[0.06] flex items-center justify-between mb-2">
         <div className="flex items-center gap-1.5">
-          <span className="text-xs font-bold text-white font-display">{stageMeta.label}</span>
-          <span className="text-[11px] font-mono font-semibold text-slate-400 bg-slate-800 rounded-full px-2 py-0.2 tnum border border-white/[0.06]">
+          <span className="text-xs font-semibold text-white">{stageMeta.label}</span>
+          <span className="text-[11px] font-mono font-medium text-slate-400 bg-white/[0.06] rounded-full px-2 py-0.2 tnum border border-white/[0.06]">
             {candidates.length}
           </span>
         </div>
         <button
           type="button"
           onClick={onAddCandidate}
-          className="text-slate-400 hover:text-white hover:bg-slate-800 p-1 rounded-md transition-colors cursor-pointer"
+          className="text-slate-400 hover:text-white p-1 rounded transition-colors cursor-pointer"
           title={`Add candidate to ${stageMeta.label}`}
         >
           <Plus className="w-3.5 h-3.5" aria-hidden="true" />
@@ -825,7 +817,7 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
       {/* Cards List */}
       <div className="flex-1 space-y-2 overflow-y-auto">
         {candidates.length === 0 ? (
-          <div className="h-28 rounded-xl border border-dashed border-white/[0.08] flex items-center justify-center text-center p-3">
+          <div className="h-28 rounded-lg border border-dashed border-white/[0.08] flex items-center justify-center text-center p-3">
             <span className="text-[11px] text-slate-500 font-medium">Drag candidates here</span>
           </div>
         ) : (
@@ -842,7 +834,7 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
   );
 };
 
-// Modern Draggable Kanban Card Component
+// Clean Draggable Kanban Card Component
 interface KanbanCardProps {
   candidate: CandidateRead;
   onSelectCandidate: (id: string) => void;
@@ -866,19 +858,19 @@ const KanbanCard: React.FC<KanbanCardProps> = ({ candidate, onSelectCandidate })
       {...listeners}
       {...attributes}
       onClick={() => onSelectCandidate(candidate.id)}
-      className={`bg-slate-900/90 rounded-xl border border-white/[0.08] p-3 cursor-grab active:cursor-grabbing hover:border-emerald-500/50 hover:bg-slate-800/80 transition-all select-none ${
+      className={`bg-[#111827] rounded-lg border border-white/[0.08] p-3 cursor-grab active:cursor-grabbing hover:border-white/[0.2] transition-colors select-none ${
         isDragging ? 'opacity-30' : ''
       }`}
     >
-      <div className="font-semibold text-xs text-white truncate">{candidate.full_name}</div>
+      <div className="font-medium text-xs text-white truncate">{candidate.full_name}</div>
       <div className="text-[11px] text-slate-400 truncate mt-0.5">{candidate.applied_role}</div>
       {candidate.match_score !== null && candidate.match_score !== undefined && (
         <div className="mt-2 flex items-center justify-between">
-          <span className="text-[10px] text-slate-500 font-medium">ATS Match</span>
+          <span className="text-[10px] text-slate-500 font-medium">Match</span>
           <StatusIndicator
             type={candidate.match_score >= 60 ? 'success' : 'danger'}
             emphasis="low"
-            pulse={candidate.match_score >= 80}
+            pulse={false}
             className="font-mono text-[10px] px-1.5 py-0"
           >
             {Math.round(candidate.match_score)}%
@@ -886,10 +878,10 @@ const KanbanCard: React.FC<KanbanCardProps> = ({ candidate, onSelectCandidate })
         </div>
       )}
       <div className="flex items-center justify-between mt-2.5 pt-2 border-t border-white/[0.06] text-[10px] text-slate-400">
-        <span className="font-medium">
+        <span className="font-normal">
           {SOURCE_LABELS[candidate.source as keyof typeof SOURCE_LABELS] || candidate.source}
         </span>
-        <span className="tnum font-mono font-medium">
+        <span className="tnum font-mono">
           {formatRelativeTime(candidate.created_at)}
         </span>
       </div>

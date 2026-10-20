@@ -14,28 +14,27 @@ export interface PipelineStripProps {
 
 const STAGE_DOT_COLORS: Record<CandidateStage, string> = {
   applied: 'bg-slate-400',
-  screening: 'bg-orange-400',
-  interview: 'bg-teal-400',
-  technical: 'bg-amber-400',
-  offer: 'bg-purple-400',
+  screening: 'bg-blue-400',
+  interview: 'bg-sky-400',
+  technical: 'bg-indigo-400',
+  offer: 'bg-violet-400',
   hired: 'bg-emerald-400',
   rejected: 'bg-rose-400',
 };
 
 const STAGE_BAR_COLORS: Record<CandidateStage, string> = {
-  applied: 'bg-slate-400',
-  screening: 'bg-orange-400',
-  interview: 'bg-teal-400',
-  technical: 'bg-amber-400',
-  offer: 'bg-purple-400',
-  hired: 'bg-emerald-400',
-  rejected: 'bg-rose-400',
+  applied: 'bg-slate-500',
+  screening: 'bg-blue-500',
+  interview: 'bg-sky-500',
+  technical: 'bg-indigo-500',
+  offer: 'bg-violet-500',
+  hired: 'bg-emerald-500',
+  rejected: 'bg-rose-500',
 };
 
 /**
- * Enterprise Pipeline Milestone Strip
- * Refined command ribbon with active stage pills, proportional distribution meter,
- * and keyboard shortcut navigation.
+ * Clean Pipeline Milestone Navigation Strip
+ * Proportional stage distribution meter, active stage filtering, and keyboard navigation.
  */
 export const PipelineStrip: React.FC<PipelineStripProps> = ({
   funnel = [],
@@ -44,7 +43,6 @@ export const PipelineStrip: React.FC<PipelineStripProps> = ({
   className,
   hideFooterShortcuts = false,
 }) => {
-  // Map funnel counts to stages
   const countMap = new Map<CandidateStage, number>();
   let totalCount = 0;
 
@@ -55,7 +53,7 @@ export const PipelineStrip: React.FC<PipelineStripProps> = ({
 
   const isEmpty = totalCount === 0;
 
-  // Keyboard shortcut listener: 1-7 for stages, 0 to clear
+  // Keyboard navigation: 1-7 for stages, 0 to reset
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement;
@@ -88,11 +86,11 @@ export const PipelineStrip: React.FC<PipelineStripProps> = ({
   return (
     <div
       className={clsx(
-        'w-full bg-slate-900/60 backdrop-blur-md border border-white/[0.08] rounded-2xl p-3 sm:p-3.5 space-y-3 shadow-inner font-sans',
+        'w-full bg-[#0E131F]/90 border border-white/[0.08] rounded-xl p-3 sm:p-3.5 space-y-3 font-sans shadow-sm',
         className
       )}
     >
-      {/* Milestone Tabs Row - Proportional Full-Width Distribution */}
+      {/* Milestone Tabs Row */}
       <div
         role="radiogroup"
         aria-label="Pipeline evaluation stages"
@@ -105,21 +103,21 @@ export const PipelineStrip: React.FC<PipelineStripProps> = ({
           aria-checked={selectedStage === null}
           onClick={() => onStageSelect?.(null)}
           className={clsx(
-            'group shrink-0 sm:flex-initial min-w-[105px] sm:min-w-[120px] inline-flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-medium transition-all duration-150 select-none cursor-pointer border',
+            'group shrink-0 min-w-[110px] sm:min-w-[125px] inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-colors select-none cursor-pointer border',
             selectedStage === null
-              ? 'bg-slate-800 text-white border-white/[0.14] shadow-xs font-semibold'
-              : 'bg-slate-950/70 hover:bg-slate-800/60 border-white/[0.06] text-slate-400 hover:text-slate-200'
+              ? 'bg-white/[0.08] text-white border-white/[0.16] font-semibold'
+              : 'bg-white/[0.02] hover:bg-white/[0.05] border-white/[0.06] text-slate-400 hover:text-slate-200'
           )}
           title="Show all candidate stages (Press 0)"
         >
-          <Layers className={clsx('w-3.5 h-3.5 shrink-0', selectedStage === null ? 'text-emerald-400' : 'text-slate-500')} />
+          <Layers className={clsx('w-3.5 h-3.5 shrink-0', selectedStage === null ? 'text-slate-200' : 'text-slate-500')} />
           <span>All Stages</span>
           <span
             className={clsx(
-              'px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold leading-tight shrink-0',
+              'px-1.5 py-0.2 rounded-full text-[10px] font-mono font-medium leading-tight shrink-0',
               selectedStage === null
-                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                : 'bg-slate-800 text-slate-400'
+                ? 'bg-white/[0.12] text-white'
+                : 'bg-white/[0.05] text-slate-400'
             )}
           >
             {totalCount}
@@ -128,7 +126,7 @@ export const PipelineStrip: React.FC<PipelineStripProps> = ({
 
         <div className="h-5 w-px bg-white/[0.08] shrink-0 mx-0.5 hidden sm:block" aria-hidden="true" />
 
-        {/* Individual Stage Milestone Chips - Flex-1 Symmetrical Distribution */}
+        {/* Individual Stage Milestone Chips */}
         <div className="flex items-center gap-1.5 sm:gap-2 flex-1 min-w-0">
           {STAGES.map((stage) => {
             const count = countMap.get(stage.key) || 0;
@@ -142,18 +140,18 @@ export const PipelineStrip: React.FC<PipelineStripProps> = ({
                 aria-checked={isSelected}
                 onClick={() => onStageSelect?.(isSelected ? null : stage.key)}
                 className={clsx(
-                  'group flex-1 min-w-[90px] inline-flex items-center justify-center gap-1.5 sm:gap-2 px-1.5 sm:px-2.5 py-2 rounded-xl text-xs font-medium transition-all duration-150 select-none cursor-pointer border',
+                  'group flex-1 min-w-[92px] inline-flex items-center justify-center gap-1.5 sm:gap-2 px-2 py-2 rounded-lg text-xs font-medium transition-colors select-none cursor-pointer border',
                   isSelected
-                    ? 'bg-emerald-950/80 border-emerald-500/70 text-emerald-200 shadow-sm font-semibold ring-1 ring-emerald-500/30'
+                    ? 'bg-white/[0.1] border-white/[0.22] text-white font-semibold'
                     : count > 0
-                    ? 'bg-slate-950/70 hover:bg-slate-800/60 border-white/[0.08] text-slate-200'
-                    : 'bg-slate-950/40 hover:bg-slate-800/40 border-white/[0.04] text-slate-400 hover:text-slate-300'
+                    ? 'bg-white/[0.02] hover:bg-white/[0.06] border-white/[0.07] text-slate-300'
+                    : 'bg-transparent hover:bg-white/[0.04] border-white/[0.04] text-slate-500 hover:text-slate-300'
                 )}
                 title={`${stage.label}: ${count} candidates (Press ${stage.keyboardKey} to filter)`}
               >
                 <span
                   className={clsx(
-                    'w-1.5 h-1.5 rounded-full shrink-0 transition-transform group-hover:scale-125',
+                    'w-1.5 h-1.5 rounded-full shrink-0',
                     STAGE_DOT_COLORS[stage.key]
                   )}
                   aria-hidden="true"
@@ -161,12 +159,12 @@ export const PipelineStrip: React.FC<PipelineStripProps> = ({
                 <span className="truncate">{stage.label}</span>
                 <span
                   className={clsx(
-                    'px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold leading-tight shrink-0',
+                    'px-1.5 py-0.2 rounded-full text-[10px] font-mono leading-tight shrink-0',
                     isSelected
-                      ? 'bg-emerald-500 text-slate-950 font-black'
+                      ? 'bg-white/[0.18] text-white font-semibold'
                       : count > 0
-                      ? 'bg-slate-800 text-emerald-300 border border-emerald-500/20'
-                      : 'bg-slate-900 text-slate-500 border border-white/[0.04]'
+                      ? 'bg-white/[0.06] text-slate-300'
+                      : 'bg-white/[0.03] text-slate-500'
                   )}
                 >
                   {count}
@@ -175,8 +173,8 @@ export const PipelineStrip: React.FC<PipelineStripProps> = ({
                   className={clsx(
                     'hidden xl:inline-flex px-1 py-0.2 text-[9px] font-mono rounded border shrink-0',
                     isSelected
-                      ? 'bg-emerald-900/60 text-emerald-300 border-emerald-500/40'
-                      : 'bg-slate-900 text-slate-500 border-white/[0.06] opacity-60 group-hover:opacity-100'
+                      ? 'bg-white/[0.12] text-slate-200 border-white/[0.15]'
+                      : 'bg-white/[0.03] text-slate-500 border-white/[0.06]'
                   )}
                 >
                   {stage.keyboardKey}
@@ -187,9 +185,9 @@ export const PipelineStrip: React.FC<PipelineStripProps> = ({
         </div>
       </div>
 
-      {/* Proportional Distribution Micro-Meter */}
+      {/* Proportional Distribution Bar */}
       {!isEmpty && (
-        <div className="h-1.5 w-full bg-slate-950/80 rounded-full overflow-hidden flex shadow-inner">
+        <div className="h-1.5 w-full bg-slate-900/80 rounded-full overflow-hidden flex">
           {STAGES.map((stage) => {
             const count = countMap.get(stage.key) || 0;
             if (count === 0) return null;
@@ -199,7 +197,7 @@ export const PipelineStrip: React.FC<PipelineStripProps> = ({
                 key={stage.key}
                 style={{ width: `${pct}%` }}
                 className={clsx(
-                  'h-full transition-all duration-300',
+                  'h-full transition-all duration-200',
                   STAGE_BAR_COLORS[stage.key],
                   selectedStage && selectedStage !== stage.key && 'opacity-20'
                 )}
@@ -214,8 +212,8 @@ export const PipelineStrip: React.FC<PipelineStripProps> = ({
       <div className="flex items-center justify-between text-xs text-slate-400 pt-0.5">
         <div className="flex items-center gap-2">
           {selectedStage ? (
-            <div className="inline-flex items-center gap-2 bg-emerald-950/60 border border-emerald-500/30 rounded-lg px-2.5 py-1 text-[11px] text-emerald-300 font-medium">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <div className="inline-flex items-center gap-2 bg-white/[0.06] border border-white/[0.1] rounded-md px-2.5 py-1 text-[11px] text-slate-200 font-medium">
+              <span className={clsx('w-1.5 h-1.5 rounded-full', STAGE_DOT_COLORS[selectedStage])} />
               <span>
                 Filtered by <strong className="text-white capitalize">{selectedStage}</strong> ({countMap.get(selectedStage) || 0})
               </span>

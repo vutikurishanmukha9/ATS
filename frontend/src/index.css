@@ -118,17 +118,8 @@ body {
   flex-direction: column;
 }
 
-/* Subtle Structural Coordinate Grid Texture (0.12 Strategy D) */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0.035;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.25) 1px, transparent 1px);
-  background-size: 24px 24px;
-}
+/* Clean solid canvas */
+
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
