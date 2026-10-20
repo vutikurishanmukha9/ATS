@@ -79,17 +79,25 @@ def upgrade() -> None:
         # pg_trgm GIN indexes for fast partial matching
         op.execute("CREATE INDEX ix_candidates_name_trgm ON candidates USING gin (full_name gin_trgm_ops);")
         op.execute("CREATE INDEX ix_candidates_email_trgm ON candidates USING gin (email gin_trgm_ops);")
-        # Full-text search tsvector generated column & GIN index
+        # Full-text search tsvector column, trigger & GIN index
+        op.execute("ALTER TABLE candidates ADD COLUMN search_vector tsvector;")
         op.execute("""
-            ALTER TABLE candidates ADD COLUMN search_vector tsvector
-            GENERATED ALWAYS AS (
-                to_tsvector('english',
-                    coalesce(full_name, '') || ' ' ||
-                    coalesce(email, '') || ' ' ||
-                    coalesce(applied_role, '') || ' ' ||
-                    array_to_string(skills, ' ')
-                )
-            ) STORED;
+            CREATE OR REPLACE FUNCTION candidates_search_vector_trigger() RETURNS trigger AS $$
+            BEGIN
+                NEW.search_vector := to_tsvector('english',
+                    coalesce(NEW.full_name, '') || ' ' ||
+                    coalesce(NEW.email, '') || ' ' ||
+                    coalesce(NEW.applied_role, '') || ' ' ||
+                    coalesce(array_to_string(NEW.skills, ' '), '')
+                );
+                RETURN NEW;
+            END
+            $$ LANGUAGE plpgsql;
+        """)
+        op.execute("""
+            CREATE TRIGGER trg_candidates_search_vector
+            BEFORE INSERT OR UPDATE ON candidates
+            FOR EACH ROW EXECUTE FUNCTION candidates_search_vector_trigger();
         """)
         op.execute("CREATE INDEX ix_candidates_search_vector ON candidates USING gin (search_vector);")
 
@@ -144,6 +152,10 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
+    bind = op.get_bind()
+    if bind.dialect.name == "postgresql":
+        op.execute("DROP TRIGGER IF EXISTS trg_candidates_search_vector ON candidates;")
+        op.execute("DROP FUNCTION IF EXISTS candidates_search_vector_trigger();")
     op.drop_table("notes")
     op.drop_table("stage_events")
     op.drop_table("candidates")
