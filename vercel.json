@@ -4,7 +4,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://your-render-backend-url.onrender.com/api/$1"
+      "destination": "https://ats-backend-skbl.onrender.com/api/$1"
     },
     {
       "source": "/(.*)",
